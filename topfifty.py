@@ -15,3 +15,11 @@ def get_track_uri(spobj: object, list_of_songs: dict):
             track_uri.append(song_uri)
 
     return track_uri
+
+
+def get_recent_fifty(spobj: object):
+    recent = spobj.current_user_recently_played(limit = 50)
+    songNames = []
+    for i in recent["items"]:
+        songNames.append(i["track"]["name"])
+    return songNames

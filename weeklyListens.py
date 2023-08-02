@@ -40,11 +40,14 @@ spobj = spotipy.Spotify(auth=token)
     
 
 def main():
-    x = get_Top(spobj)
+    # gets the recent songs
+    recents = get_recent_fifty(spobj)
     
-    genres =  get_genres(spobj, x)
+    #gets the genes of the songs and then filters based off the api
+    genres =  get_genres(spobj, recents)
     genres = check_genres(spobj, genres)
 
+    # split the generes into multiple lists since the api has a maximum call of 5
     split_genres = split_into_subsets(genres)
     limit = int(50 / len(split_genres))
     newList = []
@@ -52,16 +55,18 @@ def main():
         print(gen)
         newList += recommend(spobj, gen, limit = limit) 
 
-
+    # creates playlist
     playlist_name = 'My API Playlist'
-    playlist_description = 'i made this playlist on VSCODE BITcH'
+    playlist_description = 'i made this playlist in VScode'
 
-    create_playlist(spobj, playlist_name,playlist_description)
+    create_playlist(spobj, playlist_name, playlist_description)
 
+    # creates the list of track ids and adds them to said playlist
     list_of_uris = get_track_uri(spobj, newList)
     playlist_id = get_playlist_id(spobj, playlist_name)
 
     add_to_playlist(spobj, playlist_id, list_of_uris)
+
 
 main()
 
